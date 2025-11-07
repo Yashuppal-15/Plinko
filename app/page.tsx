@@ -19,10 +19,15 @@ export default function Home() {
 
   const PAYTABLE = [9, 6, 4, 3, 2, 1.5, 1, 1.5, 2, 3, 4, 6, 9];
 
-  function playSound(ref: React.RefObject<HTMLAudioElement>) {
+  // ✅ Fixed: make playSound handle possible null refs safely
+  function playSound(ref: React.RefObject<HTMLAudioElement | null>) {
     if (!muted && ref.current) {
-      ref.current.currentTime = 0;
-      ref.current.play().catch(() => {});
+      try {
+        ref.current.currentTime = 0;
+        ref.current.play();
+      } catch {
+        // ignore playback errors (e.g., user hasn't interacted yet)
+      }
     }
   }
 
@@ -52,7 +57,7 @@ export default function Home() {
 
       setRound({ ...round, ...res.data });
 
-      // Simulate peg sounds (soft ticks)
+      // ✅ Fixed: TS-safe refs in setTimeout
       for (let i = 0; i < 12; i++) {
         setTimeout(() => playSound(pegSoundRef), i * 150);
       }
@@ -173,9 +178,7 @@ export default function Home() {
       {/* Round Info */}
       {round && (
         <div className="w-full max-w-3xl p-4 border border-gray-700 rounded-md bg-gray-900">
-          <h2 className="font-semibold mb-2 text-lg text-gray-200">
-            Current Round
-          </h2>
+          <h2 className="font-semibold mb-2 text-lg text-gray-200">Current Round</h2>
           <pre className="text-sm text-black bg-white p-3 rounded-md overflow-auto">
             {JSON.stringify(round, null, 2)}
           </pre>
@@ -227,9 +230,7 @@ export default function Home() {
       {/* Verification */}
       {verifyRes && (
         <div className="w-full max-w-3xl p-4 border border-gray-700 rounded-md bg-gray-900 text-white">
-          <h2 className="font-semibold mb-2 text-lg text-gray-200">
-            Verification Result
-          </h2>
+          <h2 className="font-semibold mb-2 text-lg text-gray-200">Verification Result</h2>
           <pre className="text-sm text-black bg-white p-3 rounded-md overflow-auto">
             {JSON.stringify(verifyRes, null, 2)}
           </pre>
