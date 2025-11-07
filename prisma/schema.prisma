@@ -8,8 +8,7 @@ generator client {
 }
 
 datasource db {
-  // Using SQLite locally — keep this until deployment
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -24,9 +23,10 @@ model Round {
   pathJson         String?
   binIndex         Int?
   betCents         Int?
-  payoutMultiplier Float?   // ✅ newly added field
+  payoutMultiplier Float?
   dropColumn       Int?
   status           String   @default("CREATED")
   createdAt        DateTime @default(now())
   revealedAt       DateTime?
+  updatedAt        DateTime @updatedAt
 }
