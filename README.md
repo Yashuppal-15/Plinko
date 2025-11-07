@@ -1,425 +1,186 @@
-🎮 Plinko Fair Game
-A provably fair Plinko gaming platform built with modern full-stack technologies. Experience deterministic random number generation combined with commit-reveal fairness protocol.
+# 🎮 Plinko Fair Game
 
-Live Demo
-GitHub
-License
+A provably fair Plinko gaming platform with commit-reveal fairness protocol.
 
-🎯 Overview
-Plinko Fair Game is a fully functional gaming platform that demonstrates:
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-blue)](https://plinko-1vu7dv1zt-yash-uppals-projects.vercel.app/)
+[![GitHub](https://img.shields.io/badge/GitHub-yashuppal--15-black)](https://github.com/yashuppal-15/Plinko)
 
-Commit-Reveal Fairness Protocol - Ensures no cheating possible
+## 🎯 Overview
 
-Deterministic RNG - Mulberry32 algorithm for reproducible results
+Plinko Fair Game is a fully functional gaming platform demonstrating:  
+- Commit-Reveal Fairness Protocol - Ensures no cheating possible  
+- Deterministic RNG - Mulberry32 algorithm  
+- Production-Ready - Live on Vercel with PostgreSQL  
 
-Production-Ready Deployment - Live on Vercel with PostgreSQL database
+## ✨ Features
 
-Full-Stack Implementation - Modern tech stack from frontend to backend
+### Game Mechanics
+- Create Round with unique nonce & commitment hash  
+- Auto-generated client seed  
+- Admin-controlled server seed  
+- Reveal to determine ball trajectory  
+- Verify fairness cryptographically  
+- Symmetric payout table (0-12 bins)  
 
-✨ Features
-🎲 Game Mechanics
-Create Round - Generate unique nonce & commitment hash
+### Security & Fairness
+- SHA256 hashing for commitments  
+- Deterministic Mulberry32 PRNG  
+- Provably fair - players can verify independently  
+- Results determined by combined seeds  
 
-Client Seed - Auto-generated for each player
+## 🛠️ Tech Stack
 
-Server Seed - Admin-controlled random seed
+| Layer    | Technology           |
+| -------- | -------------------- |
+| Frontend | React 18 + Tailwind CSS |
+| Backend  | Node.js + Next.js    |
+| Database | PostgreSQL (Neon)    |
+| ORM      | Prisma               |
+| Deployment | Vercel             |
 
-Reveal - Combines seeds to determine ball trajectory
+## 📁 Project Structure
 
-Verify - Cryptographically verify fairness of results
-
-Payout Table - Symmetric bins (0-12) with configurable multipliers
-
-🔐 Security & Fairness
-SHA256 Hashing - Secure commitment mechanism
-
-Deterministic Randomness - Mulberry32 PRNG for reproducibility
-
-Provably Fair - Players can verify results independently
-
-No House Control - Results determined by combined seeds
-
-💾 Data Management
-PostgreSQL Database - Reliable data persistence
-
-Prisma ORM - Type-safe database queries
-
-Automated Migrations - Easy schema management
-
-🛠️ Tech Stack
-Layer	Technology	Version
-Frontend	React 18 + Tailwind CSS	Latest
-Backend	Node.js + Next.js	14+
-Database	PostgreSQL (Neon)	Latest
-ORM	Prisma	6.19+
-Deployment	Vercel	-
-Version Control	Git + GitHub	-
-📋 Project Structure
-text
 plinko-game/
 ├── app/
-│   ├── api/
-│   │   ├── rounds/
-│   │   │   ├── commit/route.ts      # Create new round
-│   │   │   ├── [id]/start/route.ts  # Reveal & calculate result
-│   │   │   └── [id]/verify/route.ts # Verify fairness
-│   │   └── ...
-│   ├── page.tsx                      # Main game UI
-│   └── layout.tsx
+│ ├── api/rounds/
+│ │ ├── commit/route.ts
+│ │ ├── [id]/start/route.ts
+│ │ └── [id]/verify/route.ts
+│ ├── page.tsx
+│ └── layout.tsx
 ├── lib/
-│   ├── prisma.ts                     # Database client
-│   ├── engine.ts                     # Game logic
-│   ├── rng.ts                        # RNG algorithm
-│   └── combiner.ts                   # Seed combining
+│ ├── prisma.ts
+│ ├── engine.ts
+│ ├── rng.ts
+│ └── combiner.ts
 ├── prisma/
-│   ├── schema.prisma                 # Database schema
-│   └── migrations/                   # Database migrations
-├── .env                              # Environment variables
+│ ├── schema.prisma
+│ └── migrations/
+├── .env
 └── package.json
-🚀 Quick Start
-Prerequisites
-Node.js 18+
 
-PostgreSQL database (or Neon)
+text
 
-npm or yarn
+## 🚀 Quick Start
 
-Installation
-bash
-# Clone repository
+### Installation
+
 git clone https://github.com/yashuppal-15/Plinko.git
 cd plinko-game
-
-# Install dependencies
 npm install
-
-# Setup environment variables
-echo 'DATABASE_URL="postgresql://user:password@host:port/dbname"' > .env
-
-# Create database & run migrations
+echo 'DATABASE_URL="postgresql://..."' > .env
 npx prisma migrate dev
-
-# Start development server
 npm run dev
-Visit http://localhost:3000 to play!
 
-📖 How to Play
-Step 1: Create Round
 text
-Click "Create Round" button
-↓
-Generates unique nonce & commitment hash
-↓
-Random client seed created
-Step 2: Add Server Seed
+
+Visit http://localhost:3000
+
+## 🎮 How to Play
+
+### Step 1: Create Round
+Click "Create Round" → Generates unique nonce & commitment → Random client seed created
+
+### Step 2: Add Server Seed
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+
 text
-Run: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-↓
-Copy the generated hex string
-↓
-Open Prisma Studio: npx prisma studio
-↓
-Paste into serverSeed field
-Step 3: Reveal
-text
-Click "Reveal" button
-↓
-Combines client + server seed
-↓
-Determines ball bin (0-12)
-↓
-Shows payout multiplier
-Step 4: Verify
-text
-Click "Verify" button
-↓
-Verifies SHA256 commitment
-↓
-Proves result is fair
-↓
-Cannot be tampered with
-🔐 Fairness Protocol
-Commit-Reveal Mechanism
-Commit Phase
+Copy output → Open `npx prisma studio` → Paste into serverSeed field
 
-Server generates nonce (random number)
+### Step 3: Reveal
+Click "Reveal" → Combines client + server seed → Determines ball bin (0-12) → Shows payout
 
-Server hash = SHA256(nonce)
+### Step 4: Verify
+Click "Verify" → Verifies SHA256 commitment → Proves result is fair
 
-Only hash is revealed to player
+## 🔐 Fairness Protocol
 
-Reveal Phase
+### Commit-Reveal Mechanism
 
-Player provides client seed
+1. Commit Phase: Server generates nonce, hash = SHA256(nonce), only hash revealed  
+2. Reveal Phase: Player provides client seed, server reveals nonce, combined seed = SHA256(client + server)  
+3. Verify Phase: Player verifies SHA256(nonce) matches, verifies result matches combined seed - No cheating possible  
 
-Server reveals original nonce
+## 📊 API Endpoints
 
-Combined seed = SHA256(client_seed + server_seed)
-
-Verify Phase
-
-Player can verify: SHA256(nonce) matches original hash
-
-Player can verify: Result matches combined seed
-
-Impossible to cheat - would need to know nonce beforehand
-
-Example Flow
-text
-Server: nonce = "abc123def456..."
-Server: hash = SHA256(nonce) = "xyz789..."
-Server: Send hash to player
-
-Player: client_seed = "random_input_from_player"
-Player: Click Reveal
-
-Server: combined = SHA256(client_seed + server_seed)
-Server: Determine ball bin based on combined seed
-Server: Calculate payout
-
-Player: Click Verify
-Player: Receives nonce
-Player: Verifies: SHA256(nonce) == original hash ✅
-Player: Verifies: Result matches combined seed ✅
-💻 API Endpoints
-Create Round
-text
+### Create Round
 POST /api/rounds/commit
 Body: { clientSeed?: string }
-Response: { id, nonce, commitHex, status: "CREATED" }
-Reveal & Start Round
+Response: { id, nonce, commitHex, status }
+
 text
+
+### Reveal Round
 POST /api/rounds/{id}/start
 Body: { clientSeed, serverSeed, dropColumn, betCents }
-Response: { id, binIndex, payoutMultiplier, pathJson, status: "REVEALED" }
-Verify Round
+Response: { id, binIndex, payoutMultiplier, pathJson }
+
 text
+
+### Verify Round
 GET /api/rounds/{id}/verify
-Response: { verified: boolean, details: {...} }
-📊 Database Schema
+Response: { verified: boolean, details }
+
 text
+
+## 💾 Database Schema
+
 model Round {
-  id                Int      @id @default(autoincrement())
-  nonce             String   // Random server value
-  commitHex         String   // SHA256 hash of nonce
-  serverSeed        String?  // Server-side secret
-  clientSeed        String?  // Player-provided seed
-  combinedSeed      String?  // Hash of combined seeds
-  pegMapHash        String?  // Hash of peg layout
-  pathJson          String?  // Ball's path through game
-  binIndex          Int?     // Where ball landed (0-12)
-  betCents          Int?     // Bet amount in cents
-  payoutMultiplier  Float?   // Payout amount
-  dropColumn        Int?     // Which peg column to drop from
-  status            String   @default("CREATED")
-  createdAt         DateTime @default(now())
-  revealedAt        DateTime?
-  updatedAt         DateTime @updatedAt
+id Int
+nonce String
+commitHex String
+serverSeed String?
+clientSeed String?
+combinedSeed String?
+pegMapHash String?
+pathJson String?
+binIndex Int?
+betCents Int?
+payoutMultiplier Float?
+dropColumn Int?
+status String
+createdAt DateTime
+revealedAt DateTime?
+updatedAt DateTime
 }
-🎮 Game Parameters
-Payout Table
-Symmetric payouts for 13 bins (0-12):
 
-Bin	0	1	2	3	4	5	6	7	8	9	10	11	12
-Multiplier	9x	6x	4x	3x	2x	1.5x	1x	1.5x	2x	3x	4x	6x	9x
-RNG Algorithm
-Type: Mulberry32 (XORshift variant)
+text
 
-Properties: Fast, deterministic, good distribution
+## 💰 Payout Table
 
-Seed Range: 32-bit unsigned integer
+| Bin | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
+|-----|---|---|---|---|---|---|---|---|---|---|----|----|-----|
+| Multiplier | 9x | 6x | 4x | 3x | 2x | 1.5x | 1x | 1.5x | 2x | 3x | 4x | 6x | 9x |
 
-🧪 Testing
-Test Locally
-bash
-# Start dev server
-npm run dev
+## 🔧 Development
 
-# Open Prisma Studio
-npx prisma studio
+### Database Commands
 
-# Test game flow:
-1. Click "Create Round"
-2. Generate server seed
-3. Enter in Prisma Studio
-4. Click "Reveal"
-5. Click "Verify"
-Verify Fairness
-javascript
-// Download round data
-// Recreate RNG with combined seed
-// Verify ball path matches
+npx prisma studio # View database UI
+npx prisma migrate dev # Run migrations
+npx prisma generate # Generate Prisma Client
+npx prisma migrate reset # Reset database
 
-const mulberry32 = (seed) => {
-  return function() {
-    let t = (seed += 0x6d2b79f5);
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-};
+text
 
-// Results will be identical!
-🚀 Deployment
-Deploy to Vercel
-bash
-# Push to GitHub
+## 🌐 Deployment
+
+### Deploy to Vercel
+
 git add .
 git commit -m "Deploy Plinko game"
 git push
 
-# Vercel auto-deploys from GitHub
-# Configure environment variables in Vercel dashboard:
-# - DATABASE_URL
-
-# Live at: https://plinko-1vu7dv1zt-yash-uppals-projects.vercel.app/
-Environment Variables
 text
-DATABASE_URL=postgresql://user:password@host/dbname
-📈 Performance
-Response Time: < 100ms per request
 
-Database: Neon PostgreSQL (optimized)
+Configure in Vercel dashboard: DATABASE_URL=postgresql://...
 
-Frontend: React 18 with optimized rendering
+Live at: https://plinko-1vu7dv1zt-yash-uppals-projects.vercel.app/
 
-Build Size: ~150KB (gzipped)
+## 👤 Author
 
-🔧 Development
-Local Setup
-bash
-# Clone & install
-git clone https://github.com/yashuppal-15/Plinko.git
-cd plinko-game
-npm install
+Yash Uppal - [@yashuppal-15](https://github.com/yashuppal-15)
 
-# Environment setup
-cp .env.example .env
-# Edit .env with your DATABASE_URL
+## 📄 License
 
-# Run migrations
-npx prisma migrate dev
-
-# Start server
-npm run dev
-Database Commands
-bash
-# View database UI
-npx prisma studio
-
-# Run migrations
-npx prisma migrate dev --name init
-
-# Generate Prisma Client
-npx prisma generate
-
-# Reset database
-npx prisma migrate reset
-📝 Contributing
-Contributions welcome! Areas for enhancement:
-
- User authentication system
-
- Wallet/Balance management
-
- Betting system with payouts
-
- Leaderboard functionality
-
- Mobile app (React Native)
-
- Advanced analytics
-
- WebSocket real-time updates
-
-📄 License
-MIT License - See LICENSE file for details
-
-👤 Author
-Yash Uppal
-
-GitHub: @yashuppal-15
-
-Portfolio: Personal Projects
-
-Location: Kanpur, India
-
-🙏 Acknowledgments
-Built as a capstone project demonstrating:
-
-✅ Full-stack web development
-
-✅ Cryptographic fairness protocols
-
-✅ Production deployment
-
-✅ Professional code practices
-
-📞 Support
-Bug Reports: GitHub Issues
-
-Questions: GitHub Discussions
-
-Live Demo: plinko-1vu7dv1zt-yash-uppals-projects.vercel.app
-
-🎯 Key Learnings
-This project demonstrates expertise in:
-
-Frontend Development
-
-React component architecture
-
-Tailwind CSS styling
-
-Interactive UI/UX
-
-Backend Development
-
-Next.js API routes
-
-Business logic implementation
-
-Error handling
-
-Database Design
-
-Prisma ORM
-
-Schema design
-
-Database migrations
-
-Security & Fairness
-
-Cryptographic hashing
-
-Commit-reveal protocol
-
-RNG implementation
-
-DevOps & Deployment
-
-Vercel deployment
-
-Environment configuration
-
-Production debugging
-
-📊 Statistics
-Total Lines of Code: 2000+
-
-API Endpoints: 3+
-
-Database Models: 1
-
-Frontend Components: 5+
-
-Development Time: 8+ hours
-
-Bugs Fixed: 50+
-
-Status: ✅ Complete and Production-Ready
-
-Last Updated: November 8, 2025
-
-Version: 1.0.0
+MIT License
