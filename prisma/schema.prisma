@@ -1,0 +1,32 @@
+// prisma/schema.prisma
+//
+// Step 1: adds payoutMultiplier to Round model
+// ---------------------------------------------
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // Using SQLite locally — keep this until deployment
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Round {
+  id               Int      @id @default(autoincrement())
+  nonce            String
+  commitHex        String
+  serverSeed       String?
+  clientSeed       String?
+  combinedSeed     String?
+  pegMapHash       String?
+  pathJson         String?
+  binIndex         Int?
+  betCents         Int?
+  payoutMultiplier Float?   // ✅ newly added field
+  dropColumn       Int?
+  status           String   @default("CREATED")
+  createdAt        DateTime @default(now())
+  revealedAt       DateTime?
+}
