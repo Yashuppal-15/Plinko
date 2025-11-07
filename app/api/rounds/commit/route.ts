@@ -1,30 +1,24 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import crypto from "crypto";
 import { getCommitHex } from "@/lib/combiner";
 
-const prisma = new PrismaClient();
-
-// Handles POST /api/rounds/commit
 export async function POST() {
-  // 1️⃣ Create random serverSeed (private to server)
-  const serverSeed = crypto.randomBytes(32).toString("hex");
-
-  // 2️⃣ Create a nonce (unique number)
-  const nonce = Date.now().toString();
-
-  // 3️⃣ Compute commit hash using serverSeed + nonce
-  const commitHex = getCommitHex(serverSeed, nonce);
-
-  // 4️⃣ Store round in database
-  const round = await prisma.round.create({
-    data: { serverSeed, nonce, commitHex },
-  });
-
-  // 5️⃣ Return public info (not serverSeed!)
-  return NextResponse.json({
-    roundId: round.id,
-    commitHex,
-    nonce,
-  });
+  try {
+    const serverSeed = crypto.randomBytes(32).toString("hex");
+    const nonce = Date.now().toString();
+    const commitHex = getCommitHex(serverSeed, nonce);
+    const round = await prisma.round.create({
+      data: {
+        serverSeed, nonce, commitHex,
+        clientSeed: null, combinedSeed: null, pegMapHash: null,
+        pathJson: null, binIndex: null, betCents: null,
+        payoutMultiplier: null, dropColumn: null, status: "CREATED",
+      },
+    });
+    return NextResponse.json({ roundId: round.id, commitHex, nonce });
+  } catch (err: any) {
+    console.error("POST /api/rounds/commit error:", err);
+    return NextResponse.json({ error: "Failed to create round", details: err.message }, { status: 500 });
+  }
 }
