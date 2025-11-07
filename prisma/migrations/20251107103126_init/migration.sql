@@ -10,6 +10,7 @@ CREATE TABLE "Round" (
     "pathJson" TEXT,
     "binIndex" INTEGER,
     "betCents" INTEGER,
+    "payoutMultiplier" REAL,
     "dropColumn" INTEGER,
     "status" TEXT NOT NULL DEFAULT 'CREATED',
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
